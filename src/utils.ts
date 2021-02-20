@@ -1,6 +1,6 @@
 import ReactReconciler from 'react-reconciler';
 
-export const noop = () => { };
+export const noop = () => {};
 
 const microtaskPromise = Promise.resolve();
 export function queueMicrotask(callback: () => void) {
@@ -43,11 +43,16 @@ temporaryScenePanelHost.visible = false;
 const checkFunc = () => {
   for (let i = 0; i < temporaryScenePanelHost.GetChildCount(); i += 1) {
     const child = temporaryScenePanelHost.GetChild(i);
-    if (child?.BHasClass('SceneLoaded')) {
-      child.SetParent(temporaryPanelHost);
+    if (child !== null) {
+      if (child.BHasClass('SceneLoaded')) {
+        child.SetParent(temporaryPanelHost);
+      }
     }
   }
 
   temporaryPanelHost.RemoveAndDeleteChildren();
+
   $.Schedule(1, checkFunc);
 };
+
+checkFunc();
