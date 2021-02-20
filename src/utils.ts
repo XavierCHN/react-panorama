@@ -1,6 +1,6 @@
 import ReactReconciler from 'react-reconciler';
 
-export const noop = () => {};
+export const noop = () => { };
 
 const microtaskPromise = Promise.resolve();
 export function queueMicrotask(callback: () => void) {
@@ -33,3 +33,21 @@ export const temporaryPanelHost =
   $.CreatePanel('Panel', dotaHud, '__react_panorama_temporary_host__');
 temporaryPanelHost.RemoveAndDeleteChildren();
 temporaryPanelHost.visible = false;
+
+export const temporaryScenePanelHost =
+  dotaHud.FindChild('__react_panorama_temporary_scene_host__') ??
+  $.CreatePanel('Panel', dotaHud, '__react_panorama_temporary_scene_host__');
+temporaryScenePanelHost.RemoveAndDeleteChildren();
+temporaryScenePanelHost.visible = false;
+
+const checkFunc = () => {
+  for (let i = 0; i < temporaryScenePanelHost.GetChildCount(); i += 1) {
+    const child = temporaryScenePanelHost.GetChild(i);
+    if (child?.BHasClass('SceneLoaded')) {
+      child.SetParent(temporaryPanelHost);
+    }
+  }
+
+  temporaryPanelHost.RemoveAndDeleteChildren();
+  $.Schedule(1, checkFunc);
+};
