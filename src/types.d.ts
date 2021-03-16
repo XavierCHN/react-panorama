@@ -4,3 +4,7 @@ declare const process: {
     BUILD_ENV: 'production' | 'development';
   };
 };
+
+declare interface CustomUIConfig {
+  temporaryScheduleHandle: ScheduleID;
+}

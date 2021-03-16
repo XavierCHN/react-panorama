@@ -40,6 +40,7 @@ export const temporaryScenePanelHost =
 temporaryScenePanelHost.RemoveAndDeleteChildren();
 temporaryScenePanelHost.visible = false;
 
+GameUI.CustomUIConfig().temporaryScheduleHandle = -1 as ScheduleID;
 const checkFunc = () => {
   for (let i = 0; i < temporaryScenePanelHost.GetChildCount(); i += 1) {
     const child = temporaryScenePanelHost.GetChild(i);
@@ -52,7 +53,15 @@ const checkFunc = () => {
 
   temporaryPanelHost.RemoveAndDeleteChildren();
 
-  $.Schedule(1, checkFunc);
+  GameUI.CustomUIConfig().temporaryScheduleHandle = $.Schedule(1, checkFunc);
 };
+
+if (GameUI.CustomUIConfig().temporaryScheduleHandle !== (-1 as ScheduleID)) {
+  try {
+    $.CancelScheduled(GameUI.CustomUIConfig().temporaryScheduleHandle);
+  } catch {}
+
+  GameUI.CustomUIConfig().temporaryScheduleHandle = -1 as ScheduleID;
+}
 
 checkFunc();
