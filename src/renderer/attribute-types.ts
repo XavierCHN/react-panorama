@@ -34,6 +34,12 @@ export interface PanelAttributes<T extends PanelBase = Panel> extends ClassAttri
   onmoveup?: EventHandler<T>;
   oncancel?: EventHandler<T>;
   ontabforward?: EventHandler<T>;
+  ondescendantfocus?: EventHandler<T>;
+  onblur?: EventHandler<T>;
+  ondescendantblur?: EventHandler<T>;
+  ontabbackward?: EventHandler<T>;
+  onscrolledtobottom?: EventHandler<T>;
+  onscrolledtorightedge?: EventHandler<T>;
 }
 
 interface LabelLikeAttributes<T extends Panel> extends PanelAttributes<T> {

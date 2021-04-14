@@ -18,8 +18,8 @@ type AttributesMatchingType<TPanel extends PanelBase, TType> = {
 type PropertyInformation<
   TName extends PanelType,
   TAttribute extends keyof AttributesByPanel[TName]
-> = { initial?: boolean | string; throwOnIncomplete?: true } & (
-  | {
+  > = { initial?: boolean | string; throwOnIncomplete?: true; } & (
+    | {
       type: PropertyType.SET;
       name: AttributesMatchingType<
         PanelTypeByName<TName>,
@@ -27,7 +27,7 @@ type PropertyInformation<
         NonNullable<AttributesByPanel[TName][TAttribute]>
       >;
     }
-  | {
+    | {
       type: PropertyType.SETTER;
       name: AttributesMatchingType<
         PanelTypeByName<TName>,
@@ -35,11 +35,11 @@ type PropertyInformation<
         (value: NonNullable<AttributesByPanel[TName][TAttribute]>) => void
       >;
     }
-  | {
+    | {
       type: PropertyType.INITIAL_ONLY;
       initial: boolean | string;
     }
-  | {
+    | {
       type: PropertyType.CUSTOM;
       update(
         panel: InternalPanel<PanelTypeByName<TName>>,
@@ -48,7 +48,7 @@ type PropertyInformation<
         propName: TAttribute,
       ): void;
     }
-);
+  );
 
 const panelPropertyInformation: {
   [TName in PanelType]?: {
@@ -79,8 +79,8 @@ const propertiesInformation: {
 } = {
   id: { type: PropertyType.INITIAL_ONLY, initial: false },
 
-  enabled: { type: PropertyType.SET, name: 'enabled', initial: true, throwOnIncomplete: true },
-  visible: { type: PropertyType.SET, name: 'visible', initial: true, throwOnIncomplete: true },
+  enabled: { type: PropertyType.SET, name: 'enabled' },
+  visible: { type: PropertyType.SET, name: 'visible' },
   hittest: { type: PropertyType.SET, name: 'hittest', initial: true, throwOnIncomplete: true },
   hittestchildren: {
     type: PropertyType.SET,
@@ -478,13 +478,13 @@ definePanelPropertyInformation('DOTAHUDOverlayMap', {
   fixedoffsetenabled: { type: PropertyType.SET, name: 'fixedoffsetenabled' },
   fixedOffset: {
     type: PropertyType.CUSTOM,
-    update(panel, newValue: { x?: number; y?: number } = {}) {
+    update(panel, newValue: { x?: number; y?: number; } = {}) {
       panel.SetFixedOffset(newValue.x || 0, newValue.y || 0);
     },
   },
   fixedBackgroundTexturePosition: {
     type: PropertyType.CUSTOM,
-    update(panel, newValue: { size?: number; x?: number; y?: number } = {}) {
+    update(panel, newValue: { size?: number; x?: number; y?: number; } = {}) {
       panel.SetFixedBackgroundTexturePosition(newValue.size || 0, newValue.x || 0, newValue.y || 0);
     },
   },
@@ -601,10 +601,8 @@ export function updateProperty(
 
   if (panelBaseNames.has(type) && propertyInformation.throwOnIncomplete) {
     throw new Error(
-      `Attribute "${propName}" cannot be ${
-        propertyInformation.initial ? 'changed on' : 'added to'
-      } incomplete ${type} panel type.${
-        propertyInformation.initial ? ' Add a "key" attribute to force re-mount.' : ''
+      `Attribute "${propName}" cannot be ${propertyInformation.initial ? 'changed on' : 'added to'
+      } incomplete ${type} panel type.${propertyInformation.initial ? ' Add a "key" attribute to force re-mount.' : ''
       }`,
     );
   }
