@@ -1,6 +1,6 @@
 import ReactReconciler from 'react-reconciler';
 
-export const noop = () => {};
+export const noop = () => { };
 
 const microtaskPromise = Promise.resolve();
 export function queueMicrotask(callback: () => void) {
@@ -20,23 +20,23 @@ export type InternalPanel<T extends PanelBase = Panel> = T & {
 };
 
 // TODO: Put it into a shared library?
-const dotaHud = (() => {
+const windowRoot = (() => {
   let panel: Panel | null = $.GetContextPanel();
   while (panel) {
-    if (panel.id === 'DotaHud') return panel;
+    if (panel.BHasClass('WindowRoot')) return panel;
     panel = panel.GetParent();
   }
 })()!;
 
 export const temporaryPanelHost =
-  dotaHud.FindChild('__react_panorama_temporary_host__') ??
-  $.CreatePanel('Panel', dotaHud, '__react_panorama_temporary_host__');
+  windowRoot.FindChild('__react_panorama_temporary_host__') ??
+  $.CreatePanel('Panel', windowRoot, '__react_panorama_temporary_host__');
 temporaryPanelHost.RemoveAndDeleteChildren();
 temporaryPanelHost.visible = false;
 
 export const temporaryScenePanelHost =
-  dotaHud.FindChild('__react_panorama_temporary_scene_host__') ??
-  $.CreatePanel('Panel', dotaHud, '__react_panorama_temporary_scene_host__');
+  windowRoot.FindChild('__react_panorama_temporary_scene_host__') ??
+  $.CreatePanel('Panel', windowRoot, '__react_panorama_temporary_scene_host__');
 temporaryScenePanelHost.RemoveAndDeleteChildren();
 temporaryScenePanelHost.visible = false;
 
@@ -59,7 +59,7 @@ const checkFunc = () => {
 if (GameUI.CustomUIConfig().temporaryScheduleHandle !== (-1 as ScheduleID)) {
   try {
     $.CancelScheduled(GameUI.CustomUIConfig().temporaryScheduleHandle);
-  } catch {}
+  } catch { }
 
   GameUI.CustomUIConfig().temporaryScheduleHandle = -1 as ScheduleID;
 }
