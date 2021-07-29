@@ -160,6 +160,45 @@ export interface DOTAScenePanelAttributes extends PanelAttributes<ScenePanel> {
   // renderwaterreflections?: boolean;
 }
 
+export interface DOTAParticleScenePanelAttributes extends PanelAttributes<ParticleScenePanel> {
+  unit?: string;
+  'activity-modifier'?: string;
+
+  map?: string;
+  camera?: string;
+  light?: string;
+
+  pitchmin?: number;
+  pitchmax?: number;
+  yawmin?: number;
+  yawmax?: number;
+  allowrotation?: boolean;
+  rotateonhover?: boolean;
+  rotateonmousemove?: boolean;
+
+  // acceleration?: number;
+  antialias?: boolean;
+  // deferredalpha?: any;
+  // drawbackground?: boolean;
+  // environment?: any;
+  // 'live-mode'?: any;
+  panoramasurfaceheight?: number;
+  panoramasurfacewidth?: number;
+  panoramasurfacexml?: string;
+  particleonly?: boolean;
+  // 'pin-fov'?: any;
+  renderdeferred?: boolean;
+  rendershadows?: boolean;
+  // renderwaterreflections?: boolean;
+
+  particleName?: string;
+  cameraOrigin?: [number, number, number];
+  lookAt?: [number, number, number];
+  fov?: number;
+  squarePixels?: boolean;
+  startActive?: boolean;
+}
+
 export interface DOTAEconItemAttributes extends PanelAttributes<EconItemPanel> {
   itemdef: number;
   itemstyle?: number;
@@ -207,7 +246,7 @@ export interface CountdownAttributes extends PanelAttributes<CountdownPanel> {
   timeDialogVariable?: string;
 }
 
-export interface TextButtonAttributes extends LabelLikeAttributes<TextButton> {}
+export interface TextButtonAttributes extends LabelLikeAttributes<TextButton> { }
 
 export interface ToggleButtonAttributes extends LabelLikeAttributes<ToggleButton> {
   selected?: boolean; // checked?
@@ -303,13 +342,33 @@ export interface DOTAHUDOverlayMapAttributes extends PanelAttributes<HUDOverlayM
   mapscroll?: boolean;
   /** @default false */
   fixedoffsetenabled?: boolean;
-  fixedOffset?: { x: number; y: number };
-  fixedBackgroundTexturePosition?: { size: number; x: number; y: number };
+  fixedOffset?: { x: number; y: number; };
+  fixedBackgroundTexturePosition?: { size: number; x: number; y: number; };
 }
 
 export interface HTMLAttributes extends PanelAttributes<HTML> {
   url?: string;
   // SetIgnoreCursor doesn't seem to do anything
+}
+
+export interface TabButtonAttributes extends PanelAttributes {
+  tabid?: string;
+  group?: string;
+  text?: string;
+  html?: boolean;
+
+  selected?: boolean;
+  onselect?: EventHandler<Panel>;
+  ondeselect?: EventHandler<Panel>;
+}
+
+export interface TabContentsAttributes extends PanelAttributes {
+  tabid?: string;
+  group?: string;
+
+  selected?: boolean;
+  onselect?: EventHandler<Panel>;
+  ondeselect?: EventHandler<Panel>;
 }
 
 export interface CustomLayoutPanelAttributes extends PanelAttributes {

@@ -44,7 +44,7 @@ function insertBefore(parent: InternalPanel, child: InternalPanel, beforeChild: 
 function removeChild(parent: InternalPanel, child: InternalPanel) {
   if (parent.paneltype === 'DropDown') {
     (parent as DropDown).RemoveOption(child.id);
-  } else if (child.paneltype === 'DOTAScenePanel' && !child.BHasClass('SceneLoaded')) {
+  } else if ((child.paneltype === 'DOTAScenePanel' || child.paneltype === 'DOTAParticleScenePanel') && !child.BHasClass('SceneLoaded')) {
     child.SetParent(temporaryScenePanelHost);
   } else {
     child.SetParent(temporaryPanelHost);
@@ -97,8 +97,8 @@ const hostConfig: ReactReconciler.HostConfig<
     if (type === 'GenericPanel') type = newProps.type;
     const panel = initialProps
       ? // Create it on the context panel instead of rootContainerInstance to
-        // preserve style context for elements rendered outside of the main tree
-        $.CreatePanelWithProperties(type, $.GetContextPanel(), newProps.id || '', initialProps)
+      // preserve style context for elements rendered outside of the main tree
+      $.CreatePanelWithProperties(type, $.GetContextPanel(), newProps.id || '', initialProps)
       : $.CreatePanel(type, $.GetContextPanel(), newProps.id || '');
 
     if (panelBaseNames.has(type)) {

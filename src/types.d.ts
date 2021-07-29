@@ -8,3 +8,8 @@ declare const process: {
 declare interface CustomUIConfig {
   temporaryScheduleHandle: ScheduleID;
 }
+
+declare type ParticleScenePanel = ScenePanel;
+declare interface PanoramaPanelNameMap {
+  DOTAParticleScenePanel: ParticleScenePanel,
+}

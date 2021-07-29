@@ -52,7 +52,6 @@ const checkFunc = () => {
   }
 
   temporaryPanelHost.RemoveAndDeleteChildren();
-
   GameUI.CustomUIConfig().temporaryScheduleHandle = $.Schedule(1, checkFunc);
 };
 

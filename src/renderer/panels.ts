@@ -20,6 +20,7 @@ export interface AttributesByPanel {
   DOTAHeroMovie: attributes.DOTAHeroMovieAttributes;
 
   DOTAScenePanel: attributes.DOTAScenePanelAttributes;
+  DOTAParticleScenePanel: attributes.DOTAParticleScenePanelAttributes;
   DOTAEconItem: attributes.DOTAEconItemAttributes;
 
   ProgressBar: attributes.ProgressBarAttributes;
@@ -53,6 +54,9 @@ export interface AttributesByPanel {
 
   HTML: attributes.HTMLAttributes;
 
+  TabButton: attributes.TabButtonAttributes;
+  TabContents: attributes.TabContentsAttributes;
+
   CustomLayoutPanel: attributes.CustomLayoutPanelAttributes;
   GenericPanel: attributes.GenericPanelAttributes;
 }
@@ -83,6 +87,7 @@ declare global {
   var DOTAHeroMovie: ExoticComponent<attributes.DOTAHeroMovieAttributes>;
 
   var DOTAScenePanel: ExoticComponent<attributes.DOTAScenePanelAttributes>;
+  var DOTAParticleScenePanel: ExoticComponent<attributes.DOTAParticleScenePanelAttributes>;
   var DOTAEconItem: ExoticComponent<attributes.DOTAEconItemAttributes>;
 
   var ProgressBar: ExoticComponent<attributes.ProgressBarAttributes>;
@@ -115,6 +120,9 @@ declare global {
   var DOTAMinimap: ExoticComponent<attributes.PanelAttributes>;
 
   var HTML: ExoticComponent<attributes.HTMLAttributes>;
+
+  var TabButton: ExoticComponent<attributes.TabButtonAttributes>;
+  var TabContents: ExoticComponent<attributes.TabContentsAttributes>;
 
   var CustomLayoutPanel: ExoticComponent<attributes.CustomLayoutPanelAttributes>;
   /**
@@ -156,6 +164,7 @@ for (const panelName of [
   'DOTAHeroMovie',
 
   'DOTAScenePanel',
+  'DOTAParticleScenePanel',
   'DOTAEconItem',
 
   'ProgressBar',
@@ -188,6 +197,9 @@ for (const panelName of [
   'DOTAMinimap',
 
   'HTML',
+
+  'TabButton',
+  'TabContents',
 
   'CustomLayoutPanel',
   'GenericPanel',

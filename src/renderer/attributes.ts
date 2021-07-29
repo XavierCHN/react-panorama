@@ -324,6 +324,61 @@ definePanelPropertyInformation('DOTAScenePanel', {
   rendershadows: { type: PropertyType.INITIAL_ONLY, initial: true },
 });
 
+
+const createParticleSceneRotationSetter = <TProp extends 'pitchmin' | 'pitchmax' | 'yawmin' | 'yawmax'>(
+  propName: TProp,
+): PropertyInformation<'DOTAParticleScenePanel', TProp> => ({
+  type: PropertyType.CUSTOM,
+  update(panel, newValue) {
+    if (panel._rotateParams === undefined) panel._rotateParams = {};
+    panel._rotateParams[propName] = newValue;
+    panel.SetRotateParams(
+      panel._rotateParams.yawmin || 0,
+      panel._rotateParams.yawmax || 0,
+      panel._rotateParams.pitchmin || 0,
+      panel._rotateParams.pitchmax || 0,
+    );
+  },
+});
+
+definePanelPropertyInformation('DOTAParticleScenePanel', {
+  // TODO: panel.SetUnit?
+  unit: { type: PropertyType.INITIAL_ONLY, initial: true },
+  'activity-modifier': { type: PropertyType.INITIAL_ONLY, initial: true },
+
+  map: { type: PropertyType.INITIAL_ONLY, initial: true },
+  camera: { type: PropertyType.INITIAL_ONLY, initial: true },
+  light: { type: PropertyType.INITIAL_ONLY, initial: true },
+
+  pitchmin: createParticleSceneRotationSetter('pitchmin'),
+  pitchmax: createParticleSceneRotationSetter('pitchmax'),
+  yawmin: createParticleSceneRotationSetter('yawmin'),
+  yawmax: createParticleSceneRotationSetter('yawmax'),
+  allowrotation: { type: PropertyType.INITIAL_ONLY, initial: true },
+  rotateonhover: { type: PropertyType.INITIAL_ONLY, initial: true },
+  rotateonmousemove: { type: PropertyType.INITIAL_ONLY, initial: true },
+
+  antialias: { type: PropertyType.INITIAL_ONLY, initial: true },
+  panoramasurfaceheight: { type: PropertyType.INITIAL_ONLY, initial: true },
+  panoramasurfacewidth: { type: PropertyType.INITIAL_ONLY, initial: true },
+  panoramasurfacexml: { type: PropertyType.INITIAL_ONLY, initial: true },
+  particleonly: { type: PropertyType.INITIAL_ONLY, initial: true },
+  renderdeferred: { type: PropertyType.INITIAL_ONLY, initial: true },
+  rendershadows: { type: PropertyType.INITIAL_ONLY, initial: true },
+
+  particleName: { type: PropertyType.INITIAL_ONLY, initial: true },
+  cameraOrigin: {
+    type: PropertyType.CUSTOM, initial: true,
+    update(panel. ) {
+
+    }
+  },
+  lookAt: { type: PropertyType.INITIAL_ONLY, initial: true },
+  fov: { type: PropertyType.INITIAL_ONLY, initial: true },
+  squarePixels: { type: PropertyType.INITIAL_ONLY, initial: true },
+  startActive: { type: PropertyType.INITIAL_ONLY, initial: true },
+});
+
 definePanelPropertyInformation('DOTAEconItem', {
   itemdef: {
     type: PropertyType.CUSTOM,
@@ -492,6 +547,20 @@ definePanelPropertyInformation('DOTAHUDOverlayMap', {
 
 definePanelPropertyInformation('HTML', {
   url: { type: PropertyType.SETTER, name: 'SetURL', initial: true },
+});
+
+definePanelPropertyInformation('TabButton', {
+  group: { type: PropertyType.INITIAL_ONLY, initial: true },
+  text: { type: PropertyType.INITIAL_ONLY, initial: true },
+  html: { type: PropertyType.INITIAL_ONLY, initial: true },
+  tabid: { type: PropertyType.INITIAL_ONLY, initial: true },
+  selected: { type: PropertyType.SET, name: 'checked' as never },
+});
+
+definePanelPropertyInformation('TabContents', {
+  group: { type: PropertyType.INITIAL_ONLY, initial: true },
+  tabid: { type: PropertyType.INITIAL_ONLY, initial: true },
+  selected: { type: PropertyType.SET, name: 'checked' as never },
 });
 
 definePanelPropertyInformation('CustomLayoutPanel', {
