@@ -1,6 +1,6 @@
 {
-  "name": "react-panorama-eom",
-  "version": "0.1.9",
+  "name": "@demon673/react-panorama",
+  "version": "0.2.0",
   "description": "React for Valve's Panorama UI (for Dota 2 Custom Games).",
   "keywords": [
     "dota",
@@ -8,9 +8,9 @@
     "react",
     "jsx"
   ],
-  "repository": "https://github.com/ark120202/react-panorama",
+  "repository": "https://github.com/Demon673/react-panorama",
   "license": "MIT",
-  "author": "ark120202",
+  "author": "Demon673",
   "exports": {
     "development": "./dist/esm/react-panorama.development.js",
     "production": "./dist/esm/react-panorama.production.js",
