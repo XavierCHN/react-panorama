@@ -588,7 +588,7 @@ const panelEventPropertyInfo: PropertyInformation<'Panel', any> = {
   },
 };
 
-function getPropertyInfo(
+export function getPropertyInfo(
   type: PanelType,
   propName: string,
 ): PropertyInformation<any, any> | undefined {

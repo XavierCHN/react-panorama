@@ -2,7 +2,7 @@ import 'panorama-polyfill/lib/console'; // React calls console.error on errors d
 import 'panorama-polyfill/lib/timers'; // React is using setTimeout directly, ignoring host config
 import ReactReconciler from 'react-reconciler';
 import { InternalPanel, noop, temporaryPanelHost, temporaryScenePanelHost } from '../utils';
-import { splitInitialProps, updateProperty } from './attributes';
+import { splitInitialProps, updateProperty, getPropertyInfo } from './attributes';
 import { fixPanelBase, panelBaseNames } from './panel-base';
 import { PanelType } from './panels';
 
@@ -128,8 +128,15 @@ const hostConfig: ReactReconciler.HostConfig<
   prepareUpdate: () => true,
   commitUpdate(panel, _updatePayload, type, oldProps, newProps) {
     for (const propName in newProps) {
-      const oldValue = oldProps[propName];
-      const newValue = newProps[propName];
+      let oldValue = oldProps[propName];
+      let newValue = newProps[propName];
+      const propertyInformation = getPropertyInfo(type, propName);
+
+      if (propertyInformation && typeof propertyInformation.preOperation === 'function') {
+        newValue = propertyInformation.preOperation(newValue);
+        oldValue = propertyInformation.preOperation(oldValue);
+      }
+
       if (oldValue !== newValue) {
         updateProperty(type, panel, propName, oldValue, newValue);
       }
