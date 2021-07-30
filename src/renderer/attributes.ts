@@ -26,6 +26,7 @@ type PropertyInformation<
         // TODO:
         NonNullable<AttributesByPanel[TName][TAttribute]>
       >;
+      preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
     | {
       type: PropertyType.SETTER;
@@ -34,10 +35,12 @@ type PropertyInformation<
         // TODO:
         (value: NonNullable<AttributesByPanel[TName][TAttribute]>) => void
       >;
+      preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
     | {
       type: PropertyType.INITIAL_ONLY;
       initial: boolean | string;
+      preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
     | {
       type: PropertyType.CUSTOM;
@@ -47,6 +50,7 @@ type PropertyInformation<
         oldValue: AttributesByPanel[TName][TAttribute],
         propName: TAttribute,
       ): void;
+      preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
   );
 
@@ -298,7 +302,7 @@ const createSceneRotationSetter = <TProp extends 'pitchmin' | 'pitchmax' | 'yawm
   },
 });
 
-definePanelPropertyInformation('DOTAScenePanel', {
+const scenePanelAttributes = {
   // TODO: panel.SetUnit?
   unit: { type: PropertyType.INITIAL_ONLY, initial: true },
   'activity-modifier': { type: PropertyType.INITIAL_ONLY, initial: true },
@@ -322,58 +326,37 @@ definePanelPropertyInformation('DOTAScenePanel', {
   particleonly: { type: PropertyType.INITIAL_ONLY, initial: true },
   renderdeferred: { type: PropertyType.INITIAL_ONLY, initial: true },
   rendershadows: { type: PropertyType.INITIAL_ONLY, initial: true },
-});
+} as const;
 
-
-const createParticleSceneRotationSetter = <TProp extends 'pitchmin' | 'pitchmax' | 'yawmin' | 'yawmax'>(
-  propName: TProp,
-): PropertyInformation<'DOTAParticleScenePanel', TProp> => ({
-  type: PropertyType.CUSTOM,
-  update(panel, newValue) {
-    if (panel._rotateParams === undefined) panel._rotateParams = {};
-    panel._rotateParams[propName] = newValue;
-    panel.SetRotateParams(
-      panel._rotateParams.yawmin || 0,
-      panel._rotateParams.yawmax || 0,
-      panel._rotateParams.pitchmin || 0,
-      panel._rotateParams.pitchmax || 0,
-    );
-  },
+definePanelPropertyInformation('DOTAScenePanel', {
+  ...scenePanelAttributes,
 });
 
 definePanelPropertyInformation('DOTAParticleScenePanel', {
-  // TODO: panel.SetUnit?
-  unit: { type: PropertyType.INITIAL_ONLY, initial: true },
-  'activity-modifier': { type: PropertyType.INITIAL_ONLY, initial: true },
-
-  map: { type: PropertyType.INITIAL_ONLY, initial: true },
-  camera: { type: PropertyType.INITIAL_ONLY, initial: true },
-  light: { type: PropertyType.INITIAL_ONLY, initial: true },
-
-  pitchmin: createParticleSceneRotationSetter('pitchmin'),
-  pitchmax: createParticleSceneRotationSetter('pitchmax'),
-  yawmin: createParticleSceneRotationSetter('yawmin'),
-  yawmax: createParticleSceneRotationSetter('yawmax'),
-  allowrotation: { type: PropertyType.INITIAL_ONLY, initial: true },
-  rotateonhover: { type: PropertyType.INITIAL_ONLY, initial: true },
-  rotateonmousemove: { type: PropertyType.INITIAL_ONLY, initial: true },
-
-  antialias: { type: PropertyType.INITIAL_ONLY, initial: true },
-  panoramasurfaceheight: { type: PropertyType.INITIAL_ONLY, initial: true },
-  panoramasurfacewidth: { type: PropertyType.INITIAL_ONLY, initial: true },
-  panoramasurfacexml: { type: PropertyType.INITIAL_ONLY, initial: true },
-  particleonly: { type: PropertyType.INITIAL_ONLY, initial: true },
-  renderdeferred: { type: PropertyType.INITIAL_ONLY, initial: true },
-  rendershadows: { type: PropertyType.INITIAL_ONLY, initial: true },
-
+  ...scenePanelAttributes,
   particleName: { type: PropertyType.INITIAL_ONLY, initial: true },
   cameraOrigin: {
-    type: PropertyType.CUSTOM, initial: true,
-    update(panel. ) {
+    type: PropertyType.INITIAL_ONLY,
+    initial: true,
+    preOperation(value) {
+      if (Array.isArray(value)) {
+        value = value.join(' ');
+      }
 
+      return value;
     }
   },
-  lookAt: { type: PropertyType.INITIAL_ONLY, initial: true },
+  lookAt: {
+    type: PropertyType.INITIAL_ONLY,
+    initial: true,
+    preOperation(value) {
+      if (Array.isArray(value)) {
+        value = value.join(' ');
+      }
+
+      return value;
+    }
+  },
   fov: { type: PropertyType.INITIAL_ONLY, initial: true },
   squarePixels: { type: PropertyType.INITIAL_ONLY, initial: true },
   startActive: { type: PropertyType.INITIAL_ONLY, initial: true },
@@ -554,13 +537,13 @@ definePanelPropertyInformation('TabButton', {
   text: { type: PropertyType.INITIAL_ONLY, initial: true },
   html: { type: PropertyType.INITIAL_ONLY, initial: true },
   tabid: { type: PropertyType.INITIAL_ONLY, initial: true },
-  selected: { type: PropertyType.SET, name: 'checked' as never },
+  selected: { type: PropertyType.SET, name: 'checked' },
 });
 
 definePanelPropertyInformation('TabContents', {
   group: { type: PropertyType.INITIAL_ONLY, initial: true },
   tabid: { type: PropertyType.INITIAL_ONLY, initial: true },
-  selected: { type: PropertyType.SET, name: 'checked' as never },
+  selected: { type: PropertyType.SET, name: 'checked' },
 });
 
 definePanelPropertyInformation('CustomLayoutPanel', {
@@ -640,15 +623,20 @@ export function splitInitialProps(type: PanelType, props: Record<string, any>) {
   const otherProps: Record<string, any> = {};
 
   for (const propName in props) {
+    let value = props[propName];
     const propertyInformation = getPropertyInfo(type, propName);
+
+    if (propertyInformation && typeof propertyInformation.preOperation === 'function') {
+      value = propertyInformation.preOperation(value);
+    }
 
     if (propertyInformation && propertyInformation.initial) {
       const initialName =
         typeof propertyInformation.initial === 'string' ? propertyInformation.initial : propName;
       hasInitialProps = true;
-      initialProps[initialName] = props[propName];
+      initialProps[initialName] = value;
     } else if (propName !== 'id') {
-      otherProps[propName] = props[propName];
+      otherProps[propName] = value;
     }
   }
 
@@ -674,6 +662,10 @@ export function updateProperty(
       } incomplete ${type} panel type.${propertyInformation.initial ? ' Add a "key" attribute to force re-mount.' : ''
       }`,
     );
+  }
+
+  if (typeof propertyInformation.preOperation === 'function') {
+    newValue = propertyInformation.preOperation(newValue);
   }
 
   switch (propertyInformation.type) {

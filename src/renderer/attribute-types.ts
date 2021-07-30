@@ -160,40 +160,10 @@ export interface DOTAScenePanelAttributes extends PanelAttributes<ScenePanel> {
   // renderwaterreflections?: boolean;
 }
 
-export interface DOTAParticleScenePanelAttributes extends PanelAttributes<ParticleScenePanel> {
-  unit?: string;
-  'activity-modifier'?: string;
-
-  map?: string;
-  camera?: string;
-  light?: string;
-
-  pitchmin?: number;
-  pitchmax?: number;
-  yawmin?: number;
-  yawmax?: number;
-  allowrotation?: boolean;
-  rotateonhover?: boolean;
-  rotateonmousemove?: boolean;
-
-  // acceleration?: number;
-  antialias?: boolean;
-  // deferredalpha?: any;
-  // drawbackground?: boolean;
-  // environment?: any;
-  // 'live-mode'?: any;
-  panoramasurfaceheight?: number;
-  panoramasurfacewidth?: number;
-  panoramasurfacexml?: string;
-  particleonly?: boolean;
-  // 'pin-fov'?: any;
-  renderdeferred?: boolean;
-  rendershadows?: boolean;
-  // renderwaterreflections?: boolean;
-
+export interface DOTAParticleScenePanelAttributes extends DOTAScenePanelAttributes {
   particleName?: string;
-  cameraOrigin?: [number, number, number];
-  lookAt?: [number, number, number];
+  cameraOrigin?: [number, number, number] | string;
+  lookAt?: [number, number, number] | string;
   fov?: number;
   squarePixels?: boolean;
   startActive?: boolean;

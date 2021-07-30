@@ -9,7 +9,8 @@ declare interface CustomUIConfig {
   temporaryScheduleHandle: ScheduleID;
 }
 
-declare type ParticleScenePanel = ScenePanel;
 declare interface PanoramaPanelNameMap {
-  DOTAParticleScenePanel: ParticleScenePanel,
+  TabButton: Panel,
+  TabContents: Panel,
+  DOTAParticleScenePanel: ScenePanel,
 }
