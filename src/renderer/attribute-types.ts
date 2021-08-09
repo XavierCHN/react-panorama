@@ -322,9 +322,8 @@ export interface HTMLAttributes extends PanelAttributes<HTML> {
 }
 
 export interface TabButtonAttributes extends PanelAttributes {
-  tabid?: string;
   group?: string;
-  text?: string;
+  localizedText?: string;
   html?: boolean;
 
   selected?: boolean;

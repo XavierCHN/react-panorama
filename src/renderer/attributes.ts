@@ -534,9 +534,8 @@ definePanelPropertyInformation('HTML', {
 
 definePanelPropertyInformation('TabButton', {
   group: { type: PropertyType.INITIAL_ONLY, initial: true },
-  text: { type: PropertyType.INITIAL_ONLY, initial: true },
+  localizedText: { type: PropertyType.INITIAL_ONLY, initial: 'text' },
   html: { type: PropertyType.INITIAL_ONLY, initial: true },
-  tabid: { type: PropertyType.INITIAL_ONLY, initial: true },
   selected: { type: PropertyType.SET, name: 'checked' },
 });
 
