@@ -29,13 +29,13 @@ const windowRoot = (() => {
 })()!;
 
 export const temporaryPanelHost =
-  windowRoot.FindChild('__react_panorama_temporary_host__') ??
+  windowRoot.FindChildTraverse('__react_panorama_temporary_host__') ??
   $.CreatePanel('Panel', windowRoot, '__react_panorama_temporary_host__');
 temporaryPanelHost.RemoveAndDeleteChildren();
 temporaryPanelHost.visible = false;
 
 export const temporaryScenePanelHost =
-  windowRoot.FindChild('__react_panorama_temporary_scene_host__') ??
+  windowRoot.FindChildTraverse('__react_panorama_temporary_scene_host__') ??
   $.CreatePanel('Panel', windowRoot, '__react_panorama_temporary_scene_host__');
 temporaryScenePanelHost.RemoveAndDeleteChildren();
 temporaryScenePanelHost.visible = false;
