@@ -12,18 +12,17 @@ export * from './attribute-types';
  */
 export function render(element: ReactElement, container: Panel, callback?: () => void) {
   const panel = container as InternalPanel;
-  const data = panel.Data<{ _reactPanoramaSymbol: any, _rootContainer: any; }>();
 
-  if (data._reactPanoramaSymbol !== reactPanoramaSymbol) {
-    data._reactPanoramaSymbol = reactPanoramaSymbol;
+  if (panel._reactPanoramaSymbol !== reactPanoramaSymbol) {
+    panel._reactPanoramaSymbol = reactPanoramaSymbol;
     // Container was used in the previous reload cycle
-    data._rootContainer = undefined;
+    panel._rootContainer = undefined;
   }
 
-  data._rootContainer ??= reconciler.createContainer(panel, false, false);
+  panel._rootContainer ??= reconciler.createContainer(panel, false, false);
 
   // @ts-expect-error callback type should be nullable
-  reconciler.updateContainer(element, data._rootContainer, null, callback);
+  reconciler.updateContainer(element, panel._rootContainer, null, callback);
 }
 
 // https://github.com/facebook/react/blob/master/packages/react-reconciler/src/ReactPortal.js

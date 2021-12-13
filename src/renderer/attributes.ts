@@ -291,15 +291,13 @@ const createSceneRotationSetter = <TProp extends 'pitchmin' | 'pitchmax' | 'yawm
 ): PropertyInformation<'DOTAScenePanel', TProp> => ({
   type: PropertyType.CUSTOM,
   update(panel, newValue) {
-    const data = panel.Data<{ _rotateParams: any; }>();
-
-    if (data._rotateParams === undefined) data._rotateParams = {};
-    data._rotateParams[propName] = newValue;
+    if (panel._rotateParams === undefined) panel._rotateParams = {};
+    panel._rotateParams[propName] = newValue;
     panel.SetRotateParams(
-      data._rotateParams.yawmin || 0,
-      data._rotateParams.yawmax || 0,
-      data._rotateParams.pitchmin || 0,
-      data._rotateParams.pitchmax || 0,
+      panel._rotateParams.yawmin || 0,
+      panel._rotateParams.yawmax || 0,
+      panel._rotateParams.pitchmin || 0,
+      panel._rotateParams.pitchmax || 0,
     );
   },
 });
@@ -368,17 +366,15 @@ definePanelPropertyInformation('DOTAEconItem', {
   itemdef: {
     type: PropertyType.CUSTOM,
     update(panel, newValue) {
-      const data = panel.Data<{ _econItemDef: any, _econItemStyle: any; }>();
-      data._econItemDef = newValue;
-      panel.SetItemByDefinitionAndStyle(data._econItemDef || 0, data._econItemStyle || 0);
+      panel._econItemDef = newValue;
+      panel.SetItemByDefinitionAndStyle(panel._econItemDef || 0, panel._econItemStyle || 0);
     },
   },
   itemstyle: {
     type: PropertyType.CUSTOM,
     update(panel, newValue) {
-      const data = panel.Data<{ _econItemDef: any, _econItemStyle: any; }>();
-      data._econItemStyle = newValue;
-      panel.SetItemByDefinitionAndStyle(data._econItemDef || 0, data._econItemStyle || 0);
+      panel._econItemStyle = newValue;
+      panel.SetItemByDefinitionAndStyle(panel._econItemDef || 0, panel._econItemStyle || 0);
     },
   },
 });
@@ -561,19 +557,16 @@ const genericPanelPropertyInfo: PropertyInformation<'GenericPanel', string> = {
 const uiEventPropertyInfo: PropertyInformation<'Panel', any> = {
   type: PropertyType.CUSTOM,
   update(panel, newValue, _oldValue, propName) {
-    const data = panel.Data<{ _eventHandlers: any; }>();
+    panel._eventHandlers ??= {};
 
-    if (data._eventHandlers === undefined) {
-      data._eventHandlers = {};
-    }
-
-    if (data._eventHandlers[propName] === undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (panel._eventHandlers[propName] === undefined) {
       $.RegisterEventHandler(propName.slice(6), panel, (...args) =>
-        data._eventHandlers[propName](...args),
+        panel._eventHandlers![propName](...args),
       );
     }
 
-    data._eventHandlers[propName] = newValue !== undefined ? newValue : noop;
+    panel._eventHandlers[propName] = newValue !== undefined ? newValue : noop;
   },
 };
 
@@ -583,17 +576,14 @@ const panelEventPropertyInfo: PropertyInformation<'Panel', any> = {
     // Unlike UI event handlers, it's not required to use an object here,
     // because SetPanelEvent overrides previous listener,
     // but we're still using it here as a potential performance optimization
-    const data = panel.Data<{ _eventHandlers: any; }>();
+    panel._eventHandlers ??= {};
 
-    if (data._eventHandlers === undefined) {
-      data._eventHandlers = {};
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (panel._eventHandlers[propName] === undefined) {
+      panel.SetPanelEvent(propName, () => panel._eventHandlers![propName](panel));
     }
 
-    if (data._eventHandlers[propName] === undefined) {
-      panel.SetPanelEvent(propName, () => data._eventHandlers[propName](panel));
-    }
-
-    data._eventHandlers[propName] = newValue !== undefined ? newValue : noop;
+    panel._eventHandlers[propName] = newValue !== undefined ? newValue : noop;
   },
 };
 

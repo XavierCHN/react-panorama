@@ -14,7 +14,3 @@ declare interface PanoramaPanelNameMap {
   TabContents: Panel,
   DOTAParticleScenePanel: ScenePanel,
 }
-
-declare interface Panel extends PanelBase {
-  Data<T extends object>(): T;
-}
