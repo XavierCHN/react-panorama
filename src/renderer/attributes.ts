@@ -18,28 +18,31 @@ type AttributesMatchingType<TPanel extends PanelBase, TType> = {
 type PropertyInformation<
   TName extends PanelType,
   TAttribute extends keyof AttributesByPanel[TName]
-> = { initial?: boolean | string; throwOnIncomplete?: true } & (
-  | {
+  > = { initial?: boolean | string; throwOnIncomplete?: true; } & (
+    | {
       type: PropertyType.SET;
       name: AttributesMatchingType<
         PanelTypeByName<TName>,
         // TODO:
         NonNullable<AttributesByPanel[TName][TAttribute]>
       >;
+      preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
-  | {
+    | {
       type: PropertyType.SETTER;
       name: AttributesMatchingType<
         PanelTypeByName<TName>,
         // TODO:
         (value: NonNullable<AttributesByPanel[TName][TAttribute]>) => void
       >;
+      preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
-  | {
+    | {
       type: PropertyType.INITIAL_ONLY;
       initial: boolean | string;
+      preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
-  | {
+    | {
       type: PropertyType.CUSTOM;
       update(
         panel: InternalPanel<PanelTypeByName<TName>>,
@@ -47,8 +50,9 @@ type PropertyInformation<
         oldValue: AttributesByPanel[TName][TAttribute],
         propName: TAttribute,
       ): void;
+      preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
-);
+  );
 
 const panelPropertyInformation: {
   [TName in PanelType]?: {
@@ -79,8 +83,8 @@ const propertiesInformation: {
 } = {
   id: { type: PropertyType.INITIAL_ONLY, initial: false },
 
-  enabled: { type: PropertyType.SET, name: 'enabled', initial: true, throwOnIncomplete: true },
-  visible: { type: PropertyType.SET, name: 'visible', initial: true, throwOnIncomplete: true },
+  enabled: { type: PropertyType.SET, name: 'enabled' },
+  visible: { type: PropertyType.SET, name: 'visible' },
   hittest: { type: PropertyType.SET, name: 'hittest', initial: true, throwOnIncomplete: true },
   hittestchildren: {
     type: PropertyType.SET,
@@ -298,7 +302,7 @@ const createSceneRotationSetter = <TProp extends 'pitchmin' | 'pitchmax' | 'yawm
   },
 });
 
-definePanelPropertyInformation('DOTAScenePanel', {
+const scenePanelAttributes = {
   // TODO: panel.SetUnit?
   unit: { type: PropertyType.INITIAL_ONLY, initial: true },
   'activity-modifier': { type: PropertyType.INITIAL_ONLY, initial: true },
@@ -322,6 +326,40 @@ definePanelPropertyInformation('DOTAScenePanel', {
   particleonly: { type: PropertyType.INITIAL_ONLY, initial: true },
   renderdeferred: { type: PropertyType.INITIAL_ONLY, initial: true },
   rendershadows: { type: PropertyType.INITIAL_ONLY, initial: true },
+} as const;
+
+definePanelPropertyInformation('DOTAScenePanel', {
+  ...scenePanelAttributes,
+});
+
+definePanelPropertyInformation('DOTAParticleScenePanel', {
+  ...scenePanelAttributes,
+  particleName: { type: PropertyType.INITIAL_ONLY, initial: true },
+  cameraOrigin: {
+    type: PropertyType.INITIAL_ONLY,
+    initial: true,
+    preOperation(value) {
+      if (Array.isArray(value)) {
+        value = value.join(' ');
+      }
+
+      return value;
+    }
+  },
+  lookAt: {
+    type: PropertyType.INITIAL_ONLY,
+    initial: true,
+    preOperation(value) {
+      if (Array.isArray(value)) {
+        value = value.join(' ');
+      }
+
+      return value;
+    }
+  },
+  fov: { type: PropertyType.INITIAL_ONLY, initial: true },
+  squarePixels: { type: PropertyType.INITIAL_ONLY, initial: true },
+  startActive: { type: PropertyType.INITIAL_ONLY, initial: true },
 });
 
 definePanelPropertyInformation('DOTAEconItem', {
@@ -478,13 +516,13 @@ definePanelPropertyInformation('DOTAHUDOverlayMap', {
   fixedoffsetenabled: { type: PropertyType.SET, name: 'fixedoffsetenabled' },
   fixedOffset: {
     type: PropertyType.CUSTOM,
-    update(panel, newValue: { x?: number; y?: number } = {}) {
+    update(panel, newValue: { x?: number; y?: number; } = {}) {
       panel.SetFixedOffset(newValue.x || 0, newValue.y || 0);
     },
   },
   fixedBackgroundTexturePosition: {
     type: PropertyType.CUSTOM,
-    update(panel, newValue: { size?: number; x?: number; y?: number } = {}) {
+    update(panel, newValue: { size?: number; x?: number; y?: number; } = {}) {
       panel.SetFixedBackgroundTexturePosition(newValue.size || 0, newValue.x || 0, newValue.y || 0);
     },
   },
@@ -492,6 +530,19 @@ definePanelPropertyInformation('DOTAHUDOverlayMap', {
 
 definePanelPropertyInformation('HTML', {
   url: { type: PropertyType.SETTER, name: 'SetURL', initial: true },
+});
+
+definePanelPropertyInformation('TabButton', {
+  group: { type: PropertyType.INITIAL_ONLY, initial: true },
+  localizedText: { type: PropertyType.INITIAL_ONLY, initial: 'text' },
+  html: { type: PropertyType.INITIAL_ONLY, initial: true },
+  selected: { type: PropertyType.SET, name: 'checked' },
+});
+
+definePanelPropertyInformation('TabContents', {
+  group: { type: PropertyType.INITIAL_ONLY, initial: true },
+  tabid: { type: PropertyType.INITIAL_ONLY, initial: true },
+  selected: { type: PropertyType.SET, name: 'checked' },
 });
 
 definePanelPropertyInformation('CustomLayoutPanel', {
@@ -536,7 +587,7 @@ const panelEventPropertyInfo: PropertyInformation<'Panel', any> = {
   },
 };
 
-function getPropertyInfo(
+export function getPropertyInfo(
   type: PanelType,
   propName: string,
 ): PropertyInformation<any, any> | undefined {
@@ -571,15 +622,20 @@ export function splitInitialProps(type: PanelType, props: Record<string, any>) {
   const otherProps: Record<string, any> = {};
 
   for (const propName in props) {
+    let value = props[propName];
     const propertyInformation = getPropertyInfo(type, propName);
+
+    if (propertyInformation && typeof propertyInformation.preOperation === 'function') {
+      value = propertyInformation.preOperation(value);
+    }
 
     if (propertyInformation && propertyInformation.initial) {
       const initialName =
         typeof propertyInformation.initial === 'string' ? propertyInformation.initial : propName;
       hasInitialProps = true;
-      initialProps[initialName] = props[propName];
+      initialProps[initialName] = value;
     } else if (propName !== 'id') {
-      otherProps[propName] = props[propName];
+      otherProps[propName] = value;
     }
   }
 
@@ -601,12 +657,14 @@ export function updateProperty(
 
   if (panelBaseNames.has(type) && propertyInformation.throwOnIncomplete) {
     throw new Error(
-      `Attribute "${propName}" cannot be ${
-        propertyInformation.initial ? 'changed on' : 'added to'
-      } incomplete ${type} panel type.${
-        propertyInformation.initial ? ' Add a "key" attribute to force re-mount.' : ''
+      `Attribute "${propName}" cannot be ${propertyInformation.initial ? 'changed on' : 'added to'
+      } incomplete ${type} panel type.${propertyInformation.initial ? ' Add a "key" attribute to force re-mount.' : ''
       }`,
     );
+  }
+
+  if (typeof propertyInformation.preOperation === 'function') {
+    newValue = propertyInformation.preOperation(newValue);
   }
 
   switch (propertyInformation.type) {

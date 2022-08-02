@@ -1,8 +1,8 @@
 import 'panorama-polyfill/lib/console'; // React calls console.error on errors during render
 import 'panorama-polyfill/lib/timers'; // React is using setTimeout directly, ignoring host config
 import ReactReconciler from 'react-reconciler';
-import { InternalPanel, noop, temporaryPanelHost } from '../utils';
-import { splitInitialProps, updateProperty } from './attributes';
+import { InternalPanel, noop, temporaryPanelHost, temporaryScenePanelHost } from '../utils';
+import { splitInitialProps, updateProperty, getPropertyInfo } from './attributes';
 import { fixPanelBase, panelBaseNames } from './panel-base';
 import { PanelType } from './panels';
 
@@ -44,6 +44,8 @@ function insertBefore(parent: InternalPanel, child: InternalPanel, beforeChild: 
 function removeChild(parent: InternalPanel, child: InternalPanel) {
   if (parent.paneltype === 'DropDown') {
     (parent as DropDown).RemoveOption(child.id);
+  } else if ((child.paneltype === 'DOTAScenePanel' || child.paneltype === 'DOTAParticleScenePanel') && !child.BHasClass('SceneLoaded')) {
+    child.SetParent(temporaryScenePanelHost);
   } else {
     child.SetParent(temporaryPanelHost);
     temporaryPanelHost.RemoveAndDeleteChildren();
@@ -95,8 +97,8 @@ const hostConfig: ReactReconciler.HostConfig<
     if (type === 'GenericPanel') type = newProps.type;
     const panel = initialProps
       ? // Create it on the context panel instead of rootContainerInstance to
-        // preserve style context for elements rendered outside of the main tree
-        $.CreatePanelWithProperties(type, $.GetContextPanel(), newProps.id || '', initialProps)
+      // preserve style context for elements rendered outside of the main tree
+      $.CreatePanelWithProperties(type, $.GetContextPanel(), newProps.id || '', initialProps)
       : $.CreatePanel(type, $.GetContextPanel(), newProps.id || '');
 
     if (panelBaseNames.has(type)) {
@@ -126,8 +128,15 @@ const hostConfig: ReactReconciler.HostConfig<
   prepareUpdate: () => true,
   commitUpdate(panel, _updatePayload, type, oldProps, newProps) {
     for (const propName in newProps) {
-      const oldValue = oldProps[propName];
-      const newValue = newProps[propName];
+      let oldValue = oldProps[propName];
+      let newValue = newProps[propName];
+      const propertyInformation = getPropertyInfo(type, propName);
+
+      if (propertyInformation && typeof propertyInformation.preOperation === 'function') {
+        newValue = propertyInformation.preOperation(newValue);
+        oldValue = propertyInformation.preOperation(oldValue);
+      }
+
       if (oldValue !== newValue) {
         updateProperty(type, panel, propName, oldValue, newValue);
       }

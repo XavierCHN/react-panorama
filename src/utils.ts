@@ -1,6 +1,6 @@
 import ReactReconciler from 'react-reconciler';
 
-export const noop = () => {};
+export const noop = () => { };
 
 const microtaskPromise = Promise.resolve();
 export function queueMicrotask(callback: () => void) {
@@ -20,16 +20,47 @@ export type InternalPanel<T extends PanelBase = Panel> = T & {
 };
 
 // TODO: Put it into a shared library?
-const dotaHud = (() => {
+const windowRoot = (() => {
   let panel: Panel | null = $.GetContextPanel();
   while (panel) {
-    if (panel.id === 'DotaHud') return panel;
+    if (panel.BHasClass('WindowRoot')) return panel;
     panel = panel.GetParent();
   }
 })()!;
 
 export const temporaryPanelHost =
-  dotaHud.FindChild('__react_panorama_temporary_host__') ??
-  $.CreatePanel('Panel', dotaHud, '__react_panorama_temporary_host__');
+  windowRoot.FindChildTraverse('__react_panorama_temporary_host__') ??
+  $.CreatePanel('Panel', windowRoot, '__react_panorama_temporary_host__');
 temporaryPanelHost.RemoveAndDeleteChildren();
 temporaryPanelHost.visible = false;
+
+export const temporaryScenePanelHost =
+  windowRoot.FindChildTraverse('__react_panorama_temporary_scene_host__') ??
+  $.CreatePanel('Panel', windowRoot, '__react_panorama_temporary_scene_host__');
+temporaryScenePanelHost.RemoveAndDeleteChildren();
+temporaryScenePanelHost.visible = false;
+
+GameUI.CustomUIConfig().temporaryScheduleHandle = -1 as ScheduleID;
+const checkFunc = () => {
+  for (let i = 0; i < temporaryScenePanelHost.GetChildCount(); i += 1) {
+    const child = temporaryScenePanelHost.GetChild(i);
+    if (child !== null) {
+      if (child.BHasClass('SceneLoaded')) {
+        child.SetParent(temporaryPanelHost);
+      }
+    }
+  }
+
+  temporaryPanelHost.RemoveAndDeleteChildren();
+  GameUI.CustomUIConfig().temporaryScheduleHandle = $.Schedule(1, checkFunc);
+};
+
+if (GameUI.CustomUIConfig().temporaryScheduleHandle !== (-1 as ScheduleID)) {
+  try {
+    $.CancelScheduled(GameUI.CustomUIConfig().temporaryScheduleHandle);
+  } catch { }
+
+  GameUI.CustomUIConfig().temporaryScheduleHandle = -1 as ScheduleID;
+}
+
+checkFunc();

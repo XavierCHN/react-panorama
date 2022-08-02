@@ -34,6 +34,12 @@ export interface PanelAttributes<T extends PanelBase = Panel> extends ClassAttri
   onmoveup?: EventHandler<T>;
   oncancel?: EventHandler<T>;
   ontabforward?: EventHandler<T>;
+  ondescendantfocus?: EventHandler<T>;
+  onblur?: EventHandler<T>;
+  ondescendantblur?: EventHandler<T>;
+  ontabbackward?: EventHandler<T>;
+  onscrolledtobottom?: EventHandler<T>;
+  onscrolledtorightedge?: EventHandler<T>;
 }
 
 interface LabelLikeAttributes<T extends Panel> extends PanelAttributes<T> {
@@ -154,6 +160,15 @@ export interface DOTAScenePanelAttributes extends PanelAttributes<ScenePanel> {
   // renderwaterreflections?: boolean;
 }
 
+export interface DOTAParticleScenePanelAttributes extends DOTAScenePanelAttributes {
+  particleName?: string;
+  cameraOrigin?: [number, number, number] | string;
+  lookAt?: [number, number, number] | string;
+  fov?: number;
+  squarePixels?: boolean;
+  startActive?: boolean;
+}
+
 export interface DOTAEconItemAttributes extends PanelAttributes<EconItemPanel> {
   itemdef: number;
   itemstyle?: number;
@@ -201,7 +216,7 @@ export interface CountdownAttributes extends PanelAttributes<CountdownPanel> {
   timeDialogVariable?: string;
 }
 
-export interface TextButtonAttributes extends LabelLikeAttributes<TextButton> {}
+export interface TextButtonAttributes extends LabelLikeAttributes<TextButton> { }
 
 export interface ToggleButtonAttributes extends LabelLikeAttributes<ToggleButton> {
   selected?: boolean; // checked?
@@ -297,13 +312,32 @@ export interface DOTAHUDOverlayMapAttributes extends PanelAttributes<HUDOverlayM
   mapscroll?: boolean;
   /** @default false */
   fixedoffsetenabled?: boolean;
-  fixedOffset?: { x: number; y: number };
-  fixedBackgroundTexturePosition?: { size: number; x: number; y: number };
+  fixedOffset?: { x: number; y: number; };
+  fixedBackgroundTexturePosition?: { size: number; x: number; y: number; };
 }
 
 export interface HTMLAttributes extends PanelAttributes<HTML> {
   url?: string;
   // SetIgnoreCursor doesn't seem to do anything
+}
+
+export interface TabButtonAttributes extends PanelAttributes {
+  group?: string;
+  localizedText?: string;
+  html?: boolean;
+
+  selected?: boolean;
+  onselect?: EventHandler<Panel>;
+  ondeselect?: EventHandler<Panel>;
+}
+
+export interface TabContentsAttributes extends PanelAttributes {
+  tabid?: string;
+  group?: string;
+
+  selected?: boolean;
+  onselect?: EventHandler<Panel>;
+  ondeselect?: EventHandler<Panel>;
 }
 
 export interface CustomLayoutPanelAttributes extends PanelAttributes {
