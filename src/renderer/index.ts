@@ -1,4 +1,5 @@
-import { ReactElement, ReactNode, ReactPortal } from 'react';
+import { ReactNode, ReactPortal } from 'react';
+import { ReactNodeList } from 'react-reconciler';
 import { InternalPanel, reactPanoramaSymbol } from '../utils';
 import './panels';
 import { reconciler } from './reconciler';
@@ -10,7 +11,7 @@ export * from './attribute-types';
  *
  * See [ReactDOM.render](https://reactjs.org/docs/react-dom.html#render) for more information.
  */
-export function render(element: ReactElement, container: Panel, callback?: () => void) {
+export function render(element: ReactNodeList, container: Panel, callback?: () => void) {
   const panel = container as InternalPanel;
 
   if (panel._reactPanoramaSymbol !== reactPanoramaSymbol) {
