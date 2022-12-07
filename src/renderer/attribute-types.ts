@@ -18,8 +18,30 @@ export interface PanelAttributes<T extends PanelBase = Panel> extends ClassAttri
   draggable?: boolean;
   enabled?: boolean;
   visible?: boolean;
+  useglobalcontext?: boolean;
+  disallowedstyleflags?: string;
+  'never-cache-composition-layer'?: boolean;
+  'always-cache-composition-layer'?: boolean;
+  'require-composition-layer'?: boolean;
+  registerforreadyevents?: boolean;
+  readyfordisplay?: boolean;
+  clipaftertransform?: boolean;
+  rememberchildfocus?: boolean;
+  keepscrolltobottom?: boolean;
+  sendchildscrolledintoviewevents?: boolean;
+  'overscroll-x'?: number;
+  'overscroll-y'?: number;
+  scrollparenttofitwhenfocused?: boolean;
+  acceptsinput?: boolean;
+  analogstickscroll?: boolean;
+  childfocusonhover?: boolean;
+  focusonhover?: boolean;
+  mousecanactivate?: 'unfocused' | 'iffocused' | 'ifparentfocused(<parentid>)' | string;
+  defaultfocus?: string;
+  selectionposboundary?: 'both' | 'vertical' | 'horizontal' | string;
   // TODO: sectionpos?: 'auto';?
 
+  onpanelevent?: EventHandler<T>;
   onload?: EventHandler<T>;
   onfocus?: EventHandler<T>;
   onactivate?: EventHandler<T>;
@@ -40,6 +62,8 @@ export interface PanelAttributes<T extends PanelBase = Panel> extends ClassAttri
   ontabbackward?: EventHandler<T>;
   onscrolledtobottom?: EventHandler<T>;
   onscrolledtorightedge?: EventHandler<T>;
+  onselect?: EventHandler<T>;
+  ondeselect?: EventHandler<T>;
 }
 
 interface LabelLikeAttributes<T extends Panel> extends PanelAttributes<T> {
@@ -48,17 +72,41 @@ interface LabelLikeAttributes<T extends Panel> extends PanelAttributes<T> {
    * not localize strings and ignores dialog variables. If you need the behavior of XML attribute,
    * use `localizedText` instead.
    */
-  text?: string | number;
+  text?: string | number | ((panel: LabelPanel) => string);
   localizedText?: string;
-  html?: boolean;
 }
 
 export interface LabelAttributes extends LabelLikeAttributes<LabelPanel> {
+  unlocalized?: boolean;
+  imgscaling?: number;
   allowtextselection?: boolean;
+  html?: boolean;
 }
 
 export interface ImageAttributes<T extends ImagePanel = ImagePanel> extends PanelAttributes<T> {
+  svgfillrule?: 'nonzero' | 'evenodd';
+  svgopacity?: number;
+  svgstrokeopacity?: number;
+  svgstrokelinejoin?: 'miter' | 'round' | 'bevel' | 'inherit';
+  svgstrokelinecap?: 'butt' | 'round' | 'square';
+  svgstrokewidth?: number;
+  svgstroke?: '#ffffff' | string;
+  svgfillopacity?: number;
+  svgfill?: '#ffffff' | string;
+  /**
+   * texturewidth and textureheight can be used to override the size of vector graphics. Default value of -1 indicates texture width/height to be determined from source file
+   */
+  texturewidth?: number;
+  /**
+   * texturewidth and textureheight can be used to override the size of vector graphics. Default value of -1 indicates texture width/height to be determined from source file
+   */
+  textureheight?: number;
+  srcset?: string;
+  animate?: string;
+  defaultsrc?: string;
   src?: string;
+  verticalalign?: 'top' | 'bottom' | 'center' | 'middle';
+  horizontalalign?: 'left' | 'right' | 'center' | 'middle';
   scaling?: ScalingFunction;
 }
 
@@ -81,11 +129,9 @@ export interface DOTAHeroImageAttributes extends ImageAttributes<HeroImage> {
   heroname?: string;
   heroid?: HeroID;
   heroimagestyle?: 'icon' | 'portrait' | 'landscape';
+  persona?: string;
   usedefaultimage?: boolean;
-}
-
-export interface DOTACountryFlagImageAttributes extends ImageAttributes {
-  country_code?: string;
+  defaultimage?: string;
 }
 
 export interface DOTALeagueImageAttributes extends ImageAttributes<LeagueImage> {
@@ -96,9 +142,12 @@ export interface DOTALeagueImageAttributes extends ImageAttributes<LeagueImage> 
 
 export interface EconItemImageAttributes extends ImageAttributes {
   itemdef: number;
+  itemstyle?: number;
 }
 
 export interface AnimatedImageStripAttributes extends ImageAttributes {
+  framewidth?: number;
+  frameheight?: number;
   frametime?: string;
   defaultframe?: number;
   animating?: boolean;
@@ -113,24 +162,44 @@ export type MovieAutoPlay = 'off' | 'onload' | 'onfocus';
 
 export interface MovieAttributes extends PanelAttributes<MoviePanel> {
   src?: string;
+  volume?: number;
+  muted?: boolean;
   repeat?: boolean;
-  controls?: Parameters<MoviePanel['SetControls']>[0];
-  title?: string;
+  notreadybehavior?: boolean;
+  loadbehavior?: boolean;
   /** @default 'onload' */
   autoplay?: MovieAutoPlay;
+  title?: string;
+  controls?: Parameters<MoviePanel['SetControls']>[0];
 }
 
 export interface DOTAHeroMovieAttributes extends PanelAttributes<HeroMovie> {
-  heroid?: HeroID;
-  heroname?: string;
-  persona?: any;
+  src?: string;
+  volume?: number;
+  muted?: boolean;
+  repeat?: boolean;
+  notreadybehavior?: boolean;
+  loadbehavior?: boolean;
   /** @default 'off' */
   autoplay?: MovieAutoPlay;
+
+  heroid?: HeroID;
+  heroname?: string;
+  persona?: string;
 }
 
+export interface RenderPanelAttributes extends PanelAttributes { }
+
 export interface DOTAScenePanelAttributes extends PanelAttributes<ScenePanel> {
-  unit?: string;
+  'post-process-fade'?: number;
+  'post-process-material'?: string;
+  'animate-during-pause'?: boolean;
+  'pin-fov'?: 'horizontal' | 'vertical';
+  'live-mode'?: 'high_end_only' | string;
+  'no-intro-effects'?: boolean;
+  environment?: 'default' | 'full_body' | 'full_body_right_side' | 'card';
   'activity-modifier'?: string;
+  unit?: string;
 
   map?: string;
   camera?: string;
@@ -140,33 +209,35 @@ export interface DOTAScenePanelAttributes extends PanelAttributes<ScenePanel> {
   pitchmax?: number;
   yawmin?: number;
   yawmax?: number;
+  acceleration?: number;
+  autorotatespeed?: number;
   allowrotation?: boolean;
   rotateonhover?: boolean;
   rotateonmousemove?: boolean;
 
-  // acceleration?: number;
   antialias?: boolean;
-  // deferredalpha?: any;
-  // drawbackground?: boolean;
-  // environment?: any;
-  // 'live-mode'?: any;
+  deferredalpha?: boolean;
+  drawbackground?: boolean;
   panoramasurfaceheight?: number;
   panoramasurfacewidth?: number;
   panoramasurfacexml?: string;
   particleonly?: boolean;
-  // 'pin-fov'?: any;
   renderdeferred?: boolean;
   rendershadows?: boolean;
-  // renderwaterreflections?: boolean;
+  renderwaterreflections?: boolean;
+  allowsuspendrepaint?: boolean;
 }
 
 export interface DOTAParticleScenePanelAttributes extends DOTAScenePanelAttributes {
-  particleName?: string;
-  cameraOrigin?: [number, number, number] | string;
-  lookAt?: [number, number, number] | string;
+  syncSpawn?: boolean;
   fov?: number;
-  squarePixels?: boolean;
   startActive?: boolean;
+  squarePixels?: boolean;
+  farPlane?: number;
+  lookAt?: [number, number, number] | string;
+  cameraOrigin?: [number, number, number] | string;
+  useMapCamera?: boolean;
+  particleName?: string;
 }
 
 export interface DOTAEconItemAttributes extends PanelAttributes<EconItemPanel> {
@@ -216,29 +287,34 @@ export interface CountdownAttributes extends PanelAttributes<CountdownPanel> {
   timeDialogVariable?: string;
 }
 
-export interface TextButtonAttributes extends LabelLikeAttributes<TextButton> { }
+export interface TextButtonAttributes extends LabelLikeAttributes<TextButton> {
+  unlocalized?: boolean;
+  html?: boolean;
+}
 
 export interface ToggleButtonAttributes extends LabelLikeAttributes<ToggleButton> {
   selected?: boolean; // checked?
-  onselect?: EventHandler<RadioButton>;
-  ondeselect?: EventHandler<RadioButton>;
+  unlocalized?: boolean;
+  html?: boolean;
 }
 
 export interface RadioButtonAttributes extends PanelAttributes<RadioButton> {
+  global?: boolean;
   group?: string;
   text?: string;
   html?: boolean;
 
   selected?: boolean;
-  onselect?: EventHandler<RadioButton>;
-  ondeselect?: EventHandler<RadioButton>;
 }
 
 export interface TextEntryAttributes extends PanelAttributes<TextEntry> {
+  autocompleteposition?: 'top' | string;
   multiline?: boolean;
   placeholder?: string;
   maxchars?: number;
   textmode?: 'normal' | 'password' | 'numeric' | 'numericpassword';
+  capslockwarn?: 1 | 0;
+  undohistory?: 'enabled';
 
   text?: string;
   ontextentrychange?: EventHandler<TextEntry>;
@@ -292,9 +368,7 @@ export interface CarouselAttributes extends PanelAttributes<CarouselPanel> {
   focus?: 'center' | 'edge';
   'focus-offset'?: string;
   wrap?: boolean;
-  selectionposboundary?: string;
   'panels-visible'?: number;
-  clipaftertransform?: boolean;
   AllowOversized?: any;
   'autoscroll-delay'?: string;
   'x-offset'?: string;
