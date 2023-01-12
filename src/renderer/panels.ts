@@ -140,9 +140,6 @@ declare global {
   /* eslint-enable */
 }
 
-// @ts-ignore
-const global: typeof globalThis = (function () { return this as any; })();
-
 for (const panelName of [
   'Panel',
   'Label',
@@ -201,5 +198,5 @@ for (const panelName of [
   'CustomLayoutPanel',
   'GenericPanel',
 ] as const) {
-  global[panelName] = panelName as any;
+  globalThis[panelName] = panelName as any;
 }
