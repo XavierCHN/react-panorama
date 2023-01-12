@@ -16,7 +16,7 @@ const BANNER = `/**
 /** @returns {import('rollup').RollupOptions} */
 const createConfig = (env, format) => ({
   input: 'src/index.ts',
-  external: ['react', ...(format === 'esm' ? [/^panorama-polyfill/] : [])],
+  external: ['react', ...(format === 'esm' ? [/^@demon673\/panorama-polyfill/] : [])],
   plugins: [
     // https://github.com/rollup/plugins/issues/272
     typescript({ noEmitOnError: false }),

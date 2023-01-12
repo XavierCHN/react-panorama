@@ -9,7 +9,6 @@ export interface AttributesByPanel {
   DOTAAbilityImage: attributes.DOTAAbilityImageAttributes;
   DOTAItemImage: attributes.DOTAItemImageAttributes;
   DOTAHeroImage: attributes.DOTAHeroImageAttributes;
-  DOTACountryFlagImage: attributes.DOTACountryFlagImageAttributes;
   DOTALeagueImage: attributes.DOTALeagueImageAttributes;
   EconItemImage: attributes.EconItemImageAttributes;
 
@@ -76,7 +75,6 @@ declare global {
   var DOTAAbilityImage: ExoticComponent<attributes.DOTAAbilityImageAttributes>;
   var DOTAItemImage: ExoticComponent<attributes.DOTAItemImageAttributes>;
   var DOTAHeroImage: ExoticComponent<attributes.DOTAHeroImageAttributes>;
-  var DOTACountryFlagImage: ExoticComponent<attributes.DOTACountryFlagImageAttributes>;
   var DOTALeagueImage: ExoticComponent<attributes.DOTALeagueImageAttributes>;
   var EconItemImage: ExoticComponent<attributes.EconItemImageAttributes>;
 
@@ -142,9 +140,6 @@ declare global {
   /* eslint-enable */
 }
 
-// eslint-disable-next-line no-new-func
-const global: typeof globalThis = new Function('return this')();
-
 for (const panelName of [
   'Panel',
   'Label',
@@ -153,7 +148,6 @@ for (const panelName of [
   'DOTAAbilityImage',
   'DOTAItemImage',
   'DOTAHeroImage',
-  'DOTACountryFlagImage',
   'DOTALeagueImage',
   'EconItemImage',
 
@@ -204,5 +198,5 @@ for (const panelName of [
   'CustomLayoutPanel',
   'GenericPanel',
 ] as const) {
-  global[panelName] = panelName as any;
+  globalThis[panelName] = panelName as any;
 }

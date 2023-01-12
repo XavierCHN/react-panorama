@@ -14,3 +14,6 @@ declare interface PanoramaPanelNameMap {
   TabContents: Panel,
   DOTAParticleScenePanel: ScenePanel,
 }
+declare interface HeroImage extends ImagePanel {
+  persona: string;
+}
