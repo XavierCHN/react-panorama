@@ -140,7 +140,8 @@ declare global {
   /* eslint-enable */
 }
 
-const global: typeof globalThis = (() => this as any)();
+// @ts-ignore
+const global: typeof globalThis = (function () { return this as any; })();
 
 for (const panelName of [
   'Panel',
