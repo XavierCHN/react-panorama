@@ -1,6 +1,6 @@
 {
   "name": "@demon673/react-panorama",
-  "version": "0.2.2",
+  "version": "0.2.5",
   "description": "React for Valve's Panorama UI (for Dota 2 Custom Games).",
   "keywords": [
     "dota",
@@ -47,7 +47,7 @@
     "ignorePatterns": "/dist"
   },
   "dependencies": {
-    "panorama-polyfill": "^0.1.0"
+    "@demon673/panorama-polyfill": "^0.1.2"
   },
   "devDependencies": {
     "@ark120202/eslint-config": "^2.4.2",

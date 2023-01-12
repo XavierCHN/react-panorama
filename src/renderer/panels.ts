@@ -140,8 +140,7 @@ declare global {
   /* eslint-enable */
 }
 
-// eslint-disable-next-line no-new-func
-const global: typeof globalThis = new Function('return this')();
+const global: typeof globalThis = (() => this as any)();
 
 for (const panelName of [
   'Panel',
