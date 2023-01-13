@@ -1,4 +1,4 @@
-import { DependencyList, useEffect, useState } from 'react';
+import { DependencyList, useLayoutEffect, useState } from 'react';
 
 /**
  * Executes `callback` every time `eventName` game event is fired.
@@ -11,7 +11,7 @@ export function useGameEvent<T extends string | object>(
   callback: (event: NetworkedData<GameEvents.InferGameEventType<T, object>>) => void,
   dependencies?: DependencyList,
 ) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const id = GameEvents.Subscribe(eventName, callback);
     return () => GameEvents.Unsubscribe(id);
   }, dependencies);
@@ -25,7 +25,7 @@ export function useRegisterForUnhandledEvent(
   callback: (...args: any[]) => void,
   dependencies?: DependencyList,
 ) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const id = $.RegisterForUnhandledEvent(event, callback);
     return () => $.UnregisterForUnhandledEvent(event, id);
   }, dependencies);
@@ -41,7 +41,7 @@ export function useNetTableKey<
 >(name: TName, key: K): NetworkedData<T[K]> {
   const [value, setValue] = useState(() => CustomNetTables.GetTableValue<TName, T, K>(name, key));
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const listener = CustomNetTables.SubscribeNetTableListener(name, (_, eventKey, eventValue) => {
       if (key === eventKey) {
         setValue(eventValue);
@@ -68,7 +68,7 @@ export function useNetTableValues<
     ),
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const listener = CustomNetTables.SubscribeNetTableListener(name, (_, eventKey, eventValue) => {
       setValue((current) => ({ ...(current as any), [eventKey]: eventValue }));
     });
