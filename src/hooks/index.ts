@@ -63,6 +63,7 @@ export function useNetTableValues<
 >(name: TName): NetworkedData<T> {
   const [values, setValue] = useState(() =>
     CustomNetTables.GetAllTableValues<TName, T>(name).reduce<NetworkedData<T>>(
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       (accumulator, pair) => ({ ...(accumulator as any), [pair.key]: pair.value }),
       {} as any,
     ),
@@ -70,6 +71,7 @@ export function useNetTableValues<
 
   useLayoutEffect(() => {
     const listener = CustomNetTables.SubscribeNetTableListener(name, (_, eventKey, eventValue) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       setValue((current) => ({ ...(current as any), [eventKey]: eventValue }));
     });
 
