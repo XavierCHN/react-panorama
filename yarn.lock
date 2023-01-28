@@ -1410,10 +1410,15 @@ object-assign@^4.1.1:
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
 
-object-inspect@^1.7.0, object-inspect@^1.8.0:
+object-inspect@^1.7.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.8.0.tgz#df807e5ecf53a609cc6bfe93eac3cc7be5b3a9d0"
   integrity sha512-jLdtEOB112fORuypAyl/50VRVIBIdVQOSUUGQHzJ4xBSbit81zRarz7GThkEFZy1RceYrWYcPcBFPQwHyAc1gA==
+
+object-inspect@^1.8.0:
+  version "1.12.3"
+  resolved "https://registry.npmmirror.com/object-inspect/-/object-inspect-1.12.3.tgz#ba62dffd67ee256c8c086dfae69e016cd1f198b9"
+  integrity sha512-geUvdk7c+eizMNUDkRpW1wJwgfOiOeHbxBR/hLXK1aT6zmVSO0jsQcs7fj6MGw89jC/cjGfLcNOrtMYtGqm81g==
 
 object-keys@^1.0.11, object-keys@^1.0.12, object-keys@^1.1.1:
   version "1.1.1"
@@ -1506,10 +1511,10 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-panorama-polyfill@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/panorama-polyfill/-/panorama-polyfill-0.1.0.tgz#049a9dd2a567ef3a46272d0eeed2894663288b47"
-  integrity sha512-EmWp/uJsCQFqjpIa+DS0ZqKS07msr6nQpfvzg3WdCoOl5I3F5H+MODGg/ff8u2q3xqLIymyLNv2ZUPq69OC0ow==
+panorama-polyfill-x@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmmirror.com/panorama-polyfill-x/-/panorama-polyfill-x-0.1.2.tgz#889ff23c56244653930b8370a76b507540d89d39"
+  integrity sha512-GTyrZh2UltRqATCzPNgHVrVBDY848CuCoTU9BjxN+G0HaRha7Z+Kx4VGGpvP0Pa388b+vVk1gWwyr68gv7y8bA==
   dependencies:
     object-inspect "^1.8.0"
 

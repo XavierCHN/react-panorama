@@ -1,6 +1,6 @@
 {
-  "name": "@demon673/react-panorama",
-  "version": "0.2.7",
+  "name": "react-panorama-x",
+  "version": "0.3.0",
   "description": "React for Valve's Panorama UI (for Dota 2 Custom Games).",
   "keywords": [
     "dota",
@@ -8,9 +8,9 @@
     "react",
     "jsx"
   ],
-  "repository": "https://github.com/Demon673/react-panorama",
+  "repository": "https://github.com/XavierCHN/react-panorama",
   "license": "MIT",
-  "author": "Demon673",
+  "author": "XavierCHN",
   "exports": {
     "development": "./dist/esm/react-panorama.development.js",
     "production": "./dist/esm/react-panorama.production.js",
@@ -47,7 +47,7 @@
     "ignorePatterns": "/dist"
   },
   "dependencies": {
-    "@demon673/panorama-polyfill": "^0.1.4"
+    "panorama-polyfill-x": "^0.1.2"
   },
   "devDependencies": {
     "@ark120202/eslint-config": "^2.4.2",

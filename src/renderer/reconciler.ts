@@ -1,5 +1,5 @@
-import '@demon673/panorama-polyfill/lib/console'; // React calls console.error on errors during render
-import '@demon673/panorama-polyfill/lib/timers'; // React is using setTimeout directly, ignoring host config
+import 'panorama-polyfill-x/lib/console'; // React calls console.error on errors during render
+import 'panorama-polyfill-x/lib/timers'; // React is using setTimeout directly, ignoring host config
 import ReactReconciler from 'react-reconciler';
 import { InternalPanel, noop, temporaryPanelHost, temporaryScenePanelHost } from '../utils';
 import { splitInitialProps, updateProperty, getPropertyInfo } from './attributes';
