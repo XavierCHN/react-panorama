@@ -44,7 +44,10 @@ function insertBefore(parent: InternalPanel, child: InternalPanel, beforeChild: 
 function removeChild(parent: InternalPanel, child: InternalPanel) {
   if (parent.paneltype === 'DropDown') {
     (parent as DropDown).RemoveOption(child.id);
-  } else if ((child.paneltype === 'DOTAScenePanel' || child.paneltype === 'DOTAParticleScenePanel') && !child.BHasClass('SceneLoaded')) {
+  } else if (
+    (child.paneltype === 'DOTAScenePanel' || child.paneltype === 'DOTAParticleScenePanel') &&
+    !child.BHasClass('SceneLoaded')
+  ) {
     child.SetParent(temporaryScenePanelHost);
   } else {
     child.SetParent(temporaryPanelHost);
@@ -80,7 +83,9 @@ const hostConfig: ReactReconciler.HostConfig<
   // https://github.com/facebook/react/pull/19124
   shouldDeprioritizeSubtree: undefined!,
 
+  // @ts-ignore
   setTimeout,
+  // @ts-ignore
   clearTimeout,
   noTimeout: -1,
   now: Date.now,
@@ -95,11 +100,13 @@ const hostConfig: ReactReconciler.HostConfig<
     const { initialProps, otherProps } = splitInitialProps(type, newProps);
 
     if (type === 'GenericPanel') type = newProps.type;
-    const panel = initialProps
-      ? // Create it on the context panel instead of rootContainerInstance to
-      // preserve style context for elements rendered outside of the main tree
-      $.CreatePanelWithProperties(type, $.GetContextPanel(), newProps.id || '', initialProps)
-      : $.CreatePanel(type, $.GetContextPanel(), newProps.id || '');
+    const panel = $.CreatePanel(
+      type,
+      $.GetContextPanel(),
+      newProps.id || '',
+      // @ts-ignore
+      initialProps ?? {},
+    ) as InternalPanel;
 
     if (panelBaseNames.has(type)) {
       fixPanelBase(panel);

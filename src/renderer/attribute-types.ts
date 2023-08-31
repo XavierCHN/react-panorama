@@ -4,7 +4,6 @@ import { ClassAttributes, ReactNode } from 'react';
 type EventHandler<T extends PanelBase> = (panel: T) => void;
 export interface PanelAttributes<T extends PanelBase = Panel> extends ClassAttributes<T> {
   children?: ReactNode;
-  dangerouslyCreateChildren?: string;
   dialogVariables?: Record<string, string | number | Date>;
 
   id?: string;
@@ -188,7 +187,7 @@ export interface DOTAHeroMovieAttributes extends PanelAttributes<HeroMovie> {
   persona?: string;
 }
 
-export interface RenderPanelAttributes extends PanelAttributes { }
+export interface RenderPanelAttributes extends PanelAttributes {}
 
 export interface DOTAScenePanelAttributes extends PanelAttributes<ScenePanel> {
   'post-process-fade'?: number;
@@ -386,8 +385,8 @@ export interface DOTAHUDOverlayMapAttributes extends PanelAttributes<HUDOverlayM
   mapscroll?: boolean;
   /** @default false */
   fixedoffsetenabled?: boolean;
-  fixedOffset?: { x: number; y: number; };
-  fixedBackgroundTexturePosition?: { size: number; x: number; y: number; };
+  fixedOffset?: { x: number; y: number };
+  fixedBackgroundTexturePosition?: { size: number; x: number; y: number };
 }
 
 export interface HTMLAttributes extends PanelAttributes<HTML> {

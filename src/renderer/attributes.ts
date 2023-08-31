@@ -17,9 +17,9 @@ type AttributesMatchingType<TPanel extends PanelBase, TType> = {
 
 type PropertyInformation<
   TName extends PanelType,
-  TAttribute extends keyof AttributesByPanel[TName]>
-  = { initial?: boolean | string; throwOnIncomplete?: true; } & (
-    | {
+  TAttribute extends keyof AttributesByPanel[TName]
+> = { initial?: boolean | string; throwOnIncomplete?: true } & (
+  | {
       type: PropertyType.SET;
       name: AttributesMatchingType<
         PanelTypeByName<TName>,
@@ -28,7 +28,7 @@ type PropertyInformation<
       >;
       preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
-    | {
+  | {
       type: PropertyType.SETTER;
       name: AttributesMatchingType<
         PanelTypeByName<TName>,
@@ -37,12 +37,12 @@ type PropertyInformation<
       >;
       preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
-    | {
+  | {
       type: PropertyType.INITIAL_ONLY;
       initial: boolean | string;
       preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
-    | {
+  | {
       type: PropertyType.CUSTOM;
       update(
         panel: InternalPanel<PanelTypeByName<TName>>,
@@ -52,7 +52,7 @@ type PropertyInformation<
       ): void;
       preOperation?(value: AttributesByPanel[TName][TAttribute]): any;
     }
-  );
+);
 
 const panelPropertyInformation: {
   [TName in PanelType]?: {
@@ -102,42 +102,26 @@ const propertiesInformation: {
     throwOnIncomplete: true,
   },
 
-  dangerouslyCreateChildren: {
-    type: PropertyType.CUSTOM,
-    update(panel, newValue) {
-      panel.RemoveAndDeleteChildren();
-      if (newValue) {
-        const status = panel.BCreateChildren(newValue);
-        if (!status) {
-          const indentedLayout = newValue.replace(/^/gm, '    ');
-          throw new Error(
-            `Cannot create children for "dangerouslyCreateChildren":\n${indentedLayout}`,
-          );
-        }
-      }
-    },
-  },
-
-  useglobalcontext: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  disallowedstyleflags: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  'never-cache-composition-layer': { type: PropertyType.INITIAL_ONLY, initial: true, },
-  'always-cache-composition-layer': { type: PropertyType.INITIAL_ONLY, initial: true, },
-  'require-composition-layer': { type: PropertyType.INITIAL_ONLY, initial: true, },
-  registerforreadyevents: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  readyfordisplay: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  clipaftertransform: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  rememberchildfocus: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  keepscrolltobottom: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  sendchildscrolledintoviewevents: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  'overscroll-x': { type: PropertyType.INITIAL_ONLY, initial: true, },
-  'overscroll-y': { type: PropertyType.INITIAL_ONLY, initial: true, },
-  scrollparenttofitwhenfocused: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  acceptsinput: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  analogstickscroll: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  childfocusonhover: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  focusonhover: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  mousecanactivate: { type: PropertyType.INITIAL_ONLY, initial: true, },
-  defaultfocus: { type: PropertyType.INITIAL_ONLY, initial: true, },
+  useglobalcontext: { type: PropertyType.INITIAL_ONLY, initial: true },
+  disallowedstyleflags: { type: PropertyType.INITIAL_ONLY, initial: true },
+  'never-cache-composition-layer': { type: PropertyType.INITIAL_ONLY, initial: true },
+  'always-cache-composition-layer': { type: PropertyType.INITIAL_ONLY, initial: true },
+  'require-composition-layer': { type: PropertyType.INITIAL_ONLY, initial: true },
+  registerforreadyevents: { type: PropertyType.INITIAL_ONLY, initial: true },
+  readyfordisplay: { type: PropertyType.INITIAL_ONLY, initial: true },
+  clipaftertransform: { type: PropertyType.INITIAL_ONLY, initial: true },
+  rememberchildfocus: { type: PropertyType.INITIAL_ONLY, initial: true },
+  keepscrolltobottom: { type: PropertyType.INITIAL_ONLY, initial: true },
+  sendchildscrolledintoviewevents: { type: PropertyType.INITIAL_ONLY, initial: true },
+  'overscroll-x': { type: PropertyType.INITIAL_ONLY, initial: true },
+  'overscroll-y': { type: PropertyType.INITIAL_ONLY, initial: true },
+  scrollparenttofitwhenfocused: { type: PropertyType.INITIAL_ONLY, initial: true },
+  acceptsinput: { type: PropertyType.INITIAL_ONLY, initial: true },
+  analogstickscroll: { type: PropertyType.INITIAL_ONLY, initial: true },
+  childfocusonhover: { type: PropertyType.INITIAL_ONLY, initial: true },
+  focusonhover: { type: PropertyType.INITIAL_ONLY, initial: true },
+  mousecanactivate: { type: PropertyType.INITIAL_ONLY, initial: true },
+  defaultfocus: { type: PropertyType.INITIAL_ONLY, initial: true },
 
   dialogVariables: {
     type: PropertyType.CUSTOM,
@@ -227,7 +211,7 @@ const labelTextAttributes = {
       } else {
         panel.text = newValue;
       }
-    }
+    },
   },
   localizedText: { type: PropertyType.INITIAL_ONLY, initial: 'text' },
   // Label.html setter doesn't appear to work correctly
@@ -288,7 +272,6 @@ definePanelPropertyInformation('DOTAHeroImage', {
   usedefaultimage: { type: PropertyType.INITIAL_ONLY, initial: true },
   defaultimage: { type: PropertyType.INITIAL_ONLY, initial: true },
 });
-
 
 definePanelPropertyInformation('DOTALeagueImage', {
   ...imageAttributes,
@@ -417,7 +400,7 @@ definePanelPropertyInformation('DOTAParticleScenePanel', {
       }
 
       return value;
-    }
+    },
   },
   cameraOrigin: {
     type: PropertyType.INITIAL_ONLY,
@@ -428,7 +411,7 @@ definePanelPropertyInformation('DOTAParticleScenePanel', {
       }
 
       return value;
-    }
+    },
   },
   useMapCamera: { type: PropertyType.INITIAL_ONLY, initial: true },
   particleName: { type: PropertyType.INITIAL_ONLY, initial: true },
@@ -597,13 +580,13 @@ definePanelPropertyInformation('DOTAHUDOverlayMap', {
   fixedoffsetenabled: { type: PropertyType.SET, name: 'fixedoffsetenabled' },
   fixedOffset: {
     type: PropertyType.CUSTOM,
-    update(panel, newValue: { x?: number; y?: number; } = {}) {
+    update(panel, newValue: { x?: number; y?: number } = {}) {
       panel.SetFixedOffset(newValue.x || 0, newValue.y || 0);
     },
   },
   fixedBackgroundTexturePosition: {
     type: PropertyType.CUSTOM,
-    update(panel, newValue: { size?: number; x?: number; y?: number; } = {}) {
+    update(panel, newValue: { size?: number; x?: number; y?: number } = {}) {
       panel.SetFixedBackgroundTexturePosition(newValue.size || 0, newValue.x || 0, newValue.y || 0);
     },
   },
@@ -738,8 +721,10 @@ export function updateProperty(
 
   if (panelBaseNames.has(type) && propertyInformation.throwOnIncomplete) {
     throw new Error(
-      `Attribute "${propName}" cannot be ${propertyInformation.initial ? 'changed on' : 'added to'
-      } incomplete ${type} panel type.${propertyInformation.initial ? ' Add a "key" attribute to force re-mount.' : ''
+      `Attribute "${propName}" cannot be ${
+        propertyInformation.initial ? 'changed on' : 'added to'
+      } incomplete ${type} panel type.${
+        propertyInformation.initial ? ' Add a "key" attribute to force re-mount.' : ''
       }`,
     );
   }

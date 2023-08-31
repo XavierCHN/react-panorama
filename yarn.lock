@@ -133,6 +133,13 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@moddota/panorama-types@^1.28.0":
+  version "1.28.0"
+  resolved "https://registry.npmmirror.com/@moddota/panorama-types/-/panorama-types-1.28.0.tgz#8fbf1021361e4dee6d690516f4eea505c7f06231"
+  integrity sha512-q6fRO0a7EJAEqI1z5O1EkT+Rdu4czDWDjXb/60cNEZcKPvN9LHufaHtT5r0UuuD9OO9S5q0wgi2DOVBz51iU6g==
+  dependencies:
+    tslib "^2.0.3"
+
 "@regru/eslint-plugin-prefer-early-return@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@regru/eslint-plugin-prefer-early-return/-/eslint-plugin-prefer-early-return-1.0.0.tgz#267c0f1409f7f45c9473bd14407ed6081e5dec4a"
@@ -1518,13 +1525,6 @@ panorama-polyfill-x@^0.1.2:
   dependencies:
     object-inspect "^1.8.0"
 
-panorama-types@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/panorama-types/-/panorama-types-1.5.2.tgz#8aa2e0ab8383dce809cb0d702656bcc20fb359f3"
-  integrity sha512-YC52IHicw0ilP6g+w/JAMAvWWMkGiJ4zxx0ZLFbijlC4CaBcmY+90aIyb4A3BDd6vgJ3XM9y/UBPn9zBR2lb7g==
-  dependencies:
-    tslib "^2.0.0"
-
 parent-module@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"
@@ -2056,10 +2056,10 @@ tslib@^1.8.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
   integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
 
-tslib@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
-  integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
+tslib@^2.0.3:
+  version "2.6.2"
+  resolved "https://registry.npmmirror.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
+  integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
 
 tsutils@^3.17.1:
   version "3.17.1"
