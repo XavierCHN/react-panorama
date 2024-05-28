@@ -26,7 +26,7 @@ const windowRoot = (() => {
     if (panel.BHasClass('WindowRoot')) return panel;
     panel = panel.GetParent();
   }
-})()!;
+})()! || $.GetContextPanel();
 
 export const temporaryPanelHost =
   windowRoot.FindChildTraverse('__react_panorama_temporary_host__') ??
