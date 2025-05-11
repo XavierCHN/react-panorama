@@ -625,7 +625,8 @@ const uiEventPropertyInfo: PropertyInformation<'Panel', any> = {
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (panel._eventHandlers[propName] === undefined) {
-      $.RegisterEventHandler(propName.slice(6), panel, (...args) =>
+      // on-ui-DragStart => DragStart
+      $.RegisterEventHandler(propName.slice(6), panel, (...args: any[]) =>
         panel._eventHandlers![propName](...args),
       );
     }
