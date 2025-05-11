@@ -52,7 +52,7 @@
   "devDependencies": {
     "@ark120202/eslint-config": "^2.4.2",
     "@ark120202/typescript-config": "^2.2.0",
-    "@moddota/panorama-types": "^1.28.0",
+    "@moddota/panorama-types": "^1.37.0",
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@rollup/plugin-replace": "^2.3.3",

@@ -133,10 +133,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@moddota/panorama-types@^1.28.0":
-  version "1.28.0"
-  resolved "https://registry.npmmirror.com/@moddota/panorama-types/-/panorama-types-1.28.0.tgz#8fbf1021361e4dee6d690516f4eea505c7f06231"
-  integrity sha512-q6fRO0a7EJAEqI1z5O1EkT+Rdu4czDWDjXb/60cNEZcKPvN9LHufaHtT5r0UuuD9OO9S5q0wgi2DOVBz51iU6g==
+"@moddota/panorama-types@^1.37.0":
+  version "1.37.0"
+  resolved "https://registry.npmmirror.com/@moddota/panorama-types/-/panorama-types-1.37.0.tgz#710ac1e9abcbaafe7b6e32cb4b815ec7b93d083d"
+  integrity sha512-Bz87DguFV3tRpFXPKm5bbAPMpLkZTSfBtliSDem5rDlleF2AM7QziQ6Wx8ha5TvgcUuWeFu3jXb8gcfM044VTg==
   dependencies:
     tslib "^2.0.3"
 
