@@ -9,7 +9,7 @@ export function useGameEvent<T extends string | object>(
     | keyof CustomGameEventDeclarations
     | keyof GameEventDeclarations,
   callback: (event: NetworkedData<GameEvents.InferGameEventType<T, object>>) => void,
-  dependencies?: DependencyList,
+  dependencies: DependencyList = [],
 ) {
   useLayoutEffect(() => {
     const id = GameEvents.Subscribe(eventName, callback);
@@ -20,10 +20,10 @@ export function useGameEvent<T extends string | object>(
 /**
  * Executes `callback` every time `event` UI event is fired.
  */
-export function useRegisterForUnhandledEvent(
-  event: string,
-  callback: (...args: any[]) => void,
-  dependencies?: DependencyList,
+export function useRegisterForUnhandledEvent<TName extends PanoramaEvents.PanoramaEventName | string>(
+  event: TName extends PanoramaEvents.PanoramaEventName ? TName : string,
+  callback: PanoramaEvents.InferPanoramaCallback<TName>,
+  dependencies: DependencyList = [],
 ) {
   useLayoutEffect(() => {
     const id = $.RegisterForUnhandledEvent(event, callback);
